@@ -59,4 +59,5 @@ config.plugins = (config.plugins || []).concat([
 ### References
 
 [1] https://dev.to/lokesh007/webassembly-with-rust-and-react-using-create-react-app-67
+
 [2] https://rustwasm.github.io/
