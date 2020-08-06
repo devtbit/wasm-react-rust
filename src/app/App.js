@@ -1,50 +1,38 @@
-import React from 'react';
-import logo from '../assets/logo.svg';
-import './App.css';
+import React, { useState, useEffect } from 'react'
+import logo from '../assets/logo.svg'
+import './App.css'
 
-class App extends React.PureComponent {
-  constructor(props) {
-    super(props);
+function App() {
+  const [ rustModule, setRustModule ] = useState()
 
-    this.state = {
-      nativeModule: null,
-    };
+  useEffect(() => {
+    (async () => {
+      const module = await import("../native/build")
+      setRustModule(module)
+    })()
+  }, [])
 
-    this.showGreet = this.showGreet.bind(this);
-  }
-
-  componentDidMount() {
-    import("../native/build").then(native => {
-      this.setState({
-        nativeModule: native,
-      });
-    });
-  }
-
-  showGreet() {
-    const {
-      nativeModule,
-    } = this.state;
-
-    if (!nativeModule) {
-      alert("Please try after some time...");
-    } else {
-      nativeModule.greet("Human");
-    }
-  }
-
-  render() {
-    return (
-      <div className="App">
-        <header className="App-header">
-          WebAssembly with Rust and React (Using create-react-app)
-          <button onClick={this.showGreet}>
-            Show greet from Rust
-          </button>
-        </header>
-      </div>
-    );
-  }
+  return (
+    <div className="App">
+      <header className="App-header">
+	<img src={logo} className="App-logo" alt="logo" />
+	<p>
+	  WebAssembly with <code>Rust</code> and <code>React</code>.
+	</p>
+	<button
+	  className="App-link"
+	  onClick={() => rustModule.greet("human")}
+	  disabled={!rustModule}
+	>
+	  {
+	    rustModule
+	  	? "Show greet from Rust"
+	  	: "Loading module..."
+	  }
+	</button>
+      </header>
+    </div>
+  )
 }
 
-export default App;
+export default App
