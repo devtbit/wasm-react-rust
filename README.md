@@ -1,68 +1,62 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# Playground for React + Rust WASM
 
-## Available Scripts
+This is a playground project to develop a React application with Rust WASM modules. The React project was initialized with `create-react-app` and ejecting to `webpack` is not required.
 
-In the project directory, you can run:
+### Requirements
 
-### `npm start`
+1. Node / NPM
+2. Rust / Cargo
+3. `wasm-pack`
 
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+Refer to Node & Rust documentation for installation.
 
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
+### Install `wasm-pack`
 
-### `npm test`
+```
+npm install -g wasm-pack --unsafe-perm=true
+```
 
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### Install project dependencies
 
-### `npm run build`
+```
+npm install
+```
 
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
+### Run
 
-The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
+```
+npm run start
+```
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+### Add more Rust modules
 
-### `npm run eject`
+Anywhere inside your `src` folder of the React project:
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+```
+wasm-pack new <your-module>
+```
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+Implement your module and then you can import your module in any of your components with a relative path:
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+```
+import("../path/to/my/module").then(rustModule => {
+  ...
+})
+```
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+Don't forget to add your module in the plugins configuration of `config-overrides.js` file:
 
-## Learn More
+```
+config.plugins = (config.plugins || []).concat([
+  ...,
+  new WasmPackPlugin({
+    ...,
+  }),
+  ...,
+])
+```
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+### References
 
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
-
-### Analyzing the Bundle Size
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
-
-### Making a Progressive Web App
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
-
-### Advanced Configuration
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
-
-### Deployment
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
-
-### `npm run build` fails to minify
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+[1] https://dev.to/lokesh007/webassembly-with-rust-and-react-using-create-react-app-67
+[2] https://rustwasm.github.io/
